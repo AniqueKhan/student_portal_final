@@ -1,0 +1,95 @@
+{% extends 'base.html' %} {% block content %}{% load static %}
+<div class="container mt-2 mb-2">
+  {% for course in courses_page %}
+      {% if forloop.first %}<div class="row">{% endif %}
+      <div class="col-4">
+        <div class="card" style="width: 18rem;">
+          <div>
+            {% if course.user.profile.picture %}
+            <img
+            class="card-img-right rounded-circle img-fluid p-lg-1"
+            style="height: 1%; width: 20%"
+            src="{{course.user.profile.picture.url}}"
+            alt="Card image cap"
+          />
+          {% else %}<img
+          class="card-img-right rounded-circle img-fluid p-lg-1"
+          style="height: 1%; width: 20%"
+          src="{% static 'img/default_pfp.png' %}"
+          alt="Card image cap"
+        />
+            {% endif %}
+        <strong>@{{course.user.username}}</strong> <span class="badge bg-dark float-end mt-3 mr-3"
+        >{{course.enrolled.count}} enrolled students</span
+      >
+          <img class="card-img-top" src="{{course.picture.url}}" alt="Card image cap">
+          <div class="card-body">
+            
+              
+            <h5 class="card-title">{{course.title}}</h5>
+            <p class="card-text">{{course.description}}</p>
+            
+          </div class='text-center'>
+            <a href="{% url 'course-detail' course.id %}" class="btn btn-outline-primary ml-2 mb-2">View Details</a>
+
+{% if request.user == course.user %}
+<a href="{% url 'edit-course' course.id %}" class="btn btn-outline-success ml-2 mb-2">Edit</a>
+<a href="{% url 'delete-course' course.id %}" class="btn btn-outline-danger ml-2 mb-2">Delete</a>
+{% else %} 
+
+{% if course in enrolled_courses %}
+  
+<a href="{% url 'unenroll' course.id %}" class="btn btn-outline-danger ml-2 mb-2">Unenroll</a> {% else %}
+  
+
+<a href="{% url 'enroll' course.id %}" class="btn btn-outline-success ml-2 mb-2">Enroll</a>
+{% endif %}
+{% endif %}
+  
+          </div>
+        </div>
+          </div>
+      {% if forloop.counter|divisibleby:3 %}</div><br><div class="row">{% endif %}
+      {% if forloop.last %}</div>{% endif %}
+  {% endfor %}</div>
+
+
+{% block pagination %}
+{% if courses_page.has_other_pages %}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    
+    {% if courses_page.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ courses_page.previous_page_number }}" tabindex="-1">Previous</a>
+    </li>
+    {% endif %}
+      
+    {% for page_number in courses_page.paginator.page_range %}
+    {% if courses_page.number == page_number %}
+    <li class="page-item active">
+      <a class="page-link" href='?page={{ page_number }}'>
+        {{page_number}}
+        <span class="sr-only">(current)</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_number }}">{{page_number}}</a></li>
+    {% endif %}
+    {% endfor %}
+
+
+    
+    
+    {% if courses_page.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ courses_page.next_page_number }}" tabindex="-1">Next</a>
+    </li>
+    {% endif %}
+    
+  </ul>
+</nav>
+{% endif %}
+{% endblock pagination %}
+  
+{% endblock content %}

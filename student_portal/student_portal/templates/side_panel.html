@@ -1,0 +1,40 @@
+<div class="list-group">
+  <a
+    href="{% url 'course-detail' course.id %}"
+    class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'course-detail' %} active {% endif %}"
+    >Home Page</a
+  >
+  <a
+    href="{% url 'course-about' course.id %}"
+    class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'course-about' %} active {% endif %}"
+    >Course About</a
+  >
+  <a
+    href="{% url 'user-profile' course.user.username %}"
+    class="list-group-item list-group-item-action"
+    >Instructor Details</a
+  >
+  <a
+    href="{% url 'course-modules' course.id %}"
+    class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'course-modules' %} active {% endif %}"
+    >Modules</a
+  >
+
+  {% if request.user == course.user %}
+  <a
+    href="{% url 'student-submissions' course.id %}"
+    class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'student-submissions' %} active {% endif %}"
+    >Student Submissions</a
+  >{% else %}<a
+    href="{% url 'my-submissions' course.id %}"
+    class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'my-submissions' %} active {% endif %}"
+    >My Submissions</a
+  >
+  {% endif %}
+
+  <a
+    href="{% url 'course-questions' course.id %}"
+    class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'course-questions' %} active {% endif %}"
+    >Questions</a
+  >
+</div>

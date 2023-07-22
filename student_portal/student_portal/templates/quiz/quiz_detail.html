@@ -1,0 +1,138 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-2">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <h1>{{quiz.title}}</h1>
+      <div class="bg-light rounded-3">
+        <div class="container-fluid">
+          <p class="fs-4">{{quiz.content|safe}}</p>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            <div class="alert alert-primary" role="alert">
+              <h6>Allowed Attempts</h6>
+
+              {% if request.user == course.user %}
+              <strong> {{quiz.allowed_attempts}}</strong> {% else %}<strong>
+                {{my_attempts.count}}/{{quiz.allowed_attempts}}</strong
+              >
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="alert alert-primary" role="alert">
+              <h6>Due Date</h6>
+              <strong> {{quiz.due}}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="accordion">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button
+                class="btn btn-link"
+                data-toggle="collapse"
+                data-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+                style="text-decoration: none"
+              >
+                <i class="fa fa-chevron-down pr-2"></i>
+
+                Quiz Questions
+              </button>
+            </h5>
+          </div>
+
+          <div
+            id="collapseOne"
+            class="accordian-body collapse"
+            aria-labelledby="headingOne"
+            data-parent="#accordion"
+          >
+            <div class="card-body">
+              <ul class="list-group mt-2">
+                {% for question in quiz.questions.all %}
+                <li class="list-group-item">
+                  {{question.question_text}} ({{question.points}} Points)
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      {% if my_attempts.count > 0 %}
+      <div id="accordion2">
+        <div class="card">
+          <div class="card-header" id="headingOne2">
+            <h5 class="mb-0">
+              <button
+                class="btn btn-link"
+                data-toggle="collapse"
+                data-target="#collapseOne2"
+                aria-expanded="true"
+                aria-controls="collapseOne2"
+                style="text-decoration: none"
+              >
+                <i class="fa fa-chevron-down pr-2"></i>
+
+                My Attempts
+              </button>
+            </h5>
+          </div>
+
+          <div
+            id="collapseOne2"
+            class="accordian-body collapse"
+            aria-labelledby="headingOne2"
+            data-parent="#accordion"
+          >
+            <div class="card-body">
+              <ul class="list-group mt-2">
+                <!-- prettier-ignore -->
+                {% for attempt in my_attempts %}
+                <li class="list-group-item">
+                  <a
+                    href="{% url 'attempt-detail' course.id module_id quiz.id attempt.id %}"
+                  >
+                    {{attempt.user.username}} scored {{attempt.score}} points
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %} {% if request.user != course.user %}
+      <div class="text-center">
+        <a
+          href="{% url 'mark-quiz-as-done' course.id module_id quiz.id %}"
+          class="btn btn-outline-success mt-2"
+          ><i class="fa fa-check-circle"></i>
+
+          Mark as done</a
+        >
+
+        {% if quiz.allowed_attempts > my_attempts.count %}
+        <a
+          href="{% url 'take-quiz' course.id module_id quiz.id %}"
+          class="btn btn-outline-primary mt-2"
+          ><i class="fa fa-question-circle"></i> Take Quiz</a
+        >
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

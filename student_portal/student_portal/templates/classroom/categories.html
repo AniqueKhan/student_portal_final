@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block content %} {% if categories.count == 0 %}
+<div class="container mt-2 mb-2">
+  <div class="alert alert-primary" role="alert">
+    Unfortunately , there are no categories as of now.
+  </div>
+</div>
+{% else %}
+<div class="container mt-2">
+  <div class="row">
+    <div class="col-md-8 offset-md-3">
+      {% for category in categories %}{% if category.course_count != 0 %}
+      <div
+        class="card"
+        style="
+          width: 25rem;
+          background-color: #e6faeb;
+          border: 1px solid #dee2e6;
+          border-radius: 0.95rem;
+          box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
+        "
+      >
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{% url 'category-courses' category.slug %}"
+              >{{category.title}}</a
+            ><!--prettier-ignore-->
+            {% if category.course_count == 1 %}
+            <span class="badge bg-dark float-end"
+              >{{category.course_count}} course</span
+            >
+            {% else %}<span class="badge bg-dark float-end"
+              >{{category.course_count}} courses</span
+            >
+            {% endif %}
+          </h5>
+        </div>
+      </div>
+      <br />{% endif %} {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock content %}

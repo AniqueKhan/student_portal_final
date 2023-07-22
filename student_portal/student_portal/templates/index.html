@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% block content %}{% load static %}
+<!--prettier-ignore -->
+{% if courses_page.object_list.count == 0 %}
+<div class="container mt-2 mb-2">
+  <div class="alert alert-primary" role="alert">
+    You are not enrolled in any course yet
+  </div>
+  <a href="{% url 'browse-courses' %}" class="btn btn-outline-primary"
+    >Browse Courses</a
+  >
+</div>
+{% endif %}
+<div class="container">
+  <div class="row">
+    {% for course in courses_page %}
+    <div class="col-sm-4 col-md-4 mb-4">
+      <div class="card mt-1">
+        {% if course.user.profile.picture %}
+        <img
+          class="card-img-right rounded-circle img-fluid p-lg-1"
+          style="height: 1%; width: 20%"
+          src="{{course.user.profile.picture.url}}"
+          alt="Card image cap"
+        />
+        {% else %}<img
+          class="card-img-right rounded-circle img-fluid p-lg-1"
+          style="height: 1%; width: 20%"
+          src="{% static 'img/default_pfp.png' %}"
+          alt="Card image cap"
+        />
+        {% endif %}
+        <a
+          href="{% url 'user-profile' course.user.username %}"
+          style="text-decoration: none"
+          class="pl-2"
+          ><strong>@{{course.user.username}}</strong></a
+        >
+
+        {% if course.picture.url %}
+        <img
+          class="card-img-top"
+          src="{{course.picture.url}}"
+          alt="Card image
+          cap"
+        />
+        {% endif %}
+
+        <div class="card-body">
+          <p class="badge bg-dark float-end mb-3 mr-3">
+            {{course.enrolled.count}} enrolled students
+          </p>
+          <h5 class="card-title">{{ course.title }}</h5>
+          <p class="card-text">{{ course.description }}</p>
+          <div class="text-center">
+            <a
+              href="{% url 'course-detail' course.id %}"
+              class="btn btn-outline-primary ml-2 mb-2"
+              >View Details</a
+            >
+
+            <a
+              href="{% url 'unenroll' course.id %}"
+              class="btn btn-outline-danger ml-2 mb-2"
+              >Unenroll</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% block pagination %} {% if courses_page.has_other_pages %}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if courses_page.has_previous %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{ courses_page.previous_page_number }}"
+        tabindex="-1"
+        >Previous</a
+      >
+    </li>
+    {% endif %} {% for page_number in courses_page.paginator.page_range %}
+    <!--prettier-ignore -->
+    {% if courses_page.number == page_number %}
+    <li class="page-item active">
+      <a class="page-link" href="?page={{ page_number }}">
+        {{page_number}}
+        <span class="sr-only">(current)</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_number }}">{{page_number}}</a>
+    </li>
+    {% endif %} {% endfor %} {% if courses_page.has_next %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{ courses_page.next_page_number }}"
+        tabindex="-1"
+        >Next</a
+      >
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %} {% endblock pagination %} {% endblock content %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-2">
+  <h1>{{course.title}}</h1>
+  <div class="row">
+    <div class="col-3">{% include 'side_panel.html' %}</div>
+    <div class="col-9">
+      {% if request.user == course.user %}
+      <a
+        href="{% url 'new-announcement' course.id %}"
+        class="btn btn-outline-primary mb-2"
+        >Post New Announcement</a
+      >{% endif %} {% if course.announcements.all.count == 0 %}
+      <h1>Welcome to the course</h1>
+      <div class="alert alert-primary" role="alert">
+        On the left panel , you can see all the details of the course. Good
+        Luck!
+      </div>
+      {% else %}
+      <h1>Recent Announcements</h1>
+      {% for announcement in course.announcements.all %}
+      <strong> <p class="mt-4">{{announcement.created_at}}</p></strong>
+      <div class="alert alert-primary" role="alert">{{announcement.body}}</div>
+      {% endfor %} {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,185 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <h1 style="text-align: center">Search</h1>
+      <form>
+        <div class="input-group mb-2">
+          <input
+            type="search"
+            name="q"
+            value="{{request.GET.q}}"
+            class="form-control rounded"
+            placeholder="Search..."
+            aria-label="Search"
+            aria-describedby="search-addon"
+          />
+          <button class="btn btn-outline-primary" type="submit">
+            <i class="fa-solid fa-search"></i>
+          </button>
+        </div>
+        <!--prettier-ignore-->
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          name="filter_selected"> <!--prettier-ignore-->
+
+          {% if filter_selected == "All" %}
+          <option value='All' selected>All</option>
+          {% else %}<option value='All' >All</option>
+          {% endif %}
+
+          {% if filter_selected == "Users" %}
+          <option value='Users' selected>Users</option>
+          {% else %}<option value='Users' >Users</option>
+          {% endif %}
+
+          {% if filter_selected == "Courses" %}
+          <option value='Courses' selected>Courses</option>
+          {% else %}<option value='Courses' >Courses</option>
+          {% endif %}
+
+          {% if filter_selected == "Categories" %}
+          <option value='Categories' selected>Categories</option>
+          {% else %}<option value='Categories' >Categories</option>
+          {% endif %}
+        </select>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <!--For Users -->
+      <!--prettier-ignore-->
+
+      {% if filter_selected == "All" and users or filter_selected == "Users" %}
+      <h1 class="mt-4">Users</h1>
+      {% for user in users %}
+      <div class="card mb-2 mt-2">
+        <div class="card-body">
+          <span>
+            {% if user.picture %}
+            <img
+              class="card-img-right rounded-circle img-fluid"
+              style="height: 1%; width: 20%"
+              src="{{user.picture.url}}"
+              alt="Card image cap"
+            />
+            {% else %}
+            <img
+              class="card-img-right rounded-circle img-thumbnail img-fluid"
+              style="display: block; max-width: 100%; height: 1%; width: 20%"
+              src="{% static 'img/default_pfp.png' %}"
+              alt="Card image cap"
+            />
+            {% endif %}
+
+            <h5 class="card-title mt-2">
+              <a href="#">@{{user.user.username}}</a>
+            </h5>
+            <h5 class="card-title">
+              <!--prettier-ignore -->
+
+              {% if user.full_name %}
+              {{user.full_name}}
+              {% endif %}
+            </h5>
+
+            {% if request.user != user.user %}
+            <a
+              href="{% url 'new-conversation' user.user.username %}"
+              class="btn btn-outline-success float-end"
+              >Message {{user.user.username}}</a
+            >
+            {% endif %}
+
+            <a
+              href="{% url 'user-profile' user.user.username %}"
+              class="btn btn-outline-primary float-end mr-2"
+              >View {{user.user.username}}'s profile</a
+            >
+          </span>
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+
+      <!--For Courses -->
+      <!--prettier-ignore-->
+      {% if filter_selected == "All" and courses or filter_selected == "Courses" %}
+      <h1 class="mt-4">Courses</h1>
+      {% for course in courses %}
+      <div class="col-md-10 offset-md-1">
+        <div class="card mb-2">
+          {% if course.user.profile.picture %}
+          <img
+            class="card-img-right rounded-circle img-fluid p-lg-1"
+            style="height: 1%; width: 20%"
+            src="{{course.user.profile.picture.url}}"
+            alt="Card image cap"
+          />
+          {% else %}<img
+            class="card-img-right rounded-circle img-fluid p-lg-1"
+            style="height: 1%; width: 20%"
+            src="{% static 'img/default_pfp.png' %}"
+            alt="Card image cap"
+          />
+          {% endif %}<strong
+            >@{{course.user.username}}<span
+              class="badge bg-dark float-end mb-3 mr-3"
+              >{{course.enrolled.count}} enrolled students</span
+            ></strong
+          >
+          <img
+            class="card-img-top"
+            src="{{course.picture.url}}"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{course.title}}</h5>
+            <p class="card-text">{{course.description}}</p>
+            <a
+              href="{% url 'course-detail' course.id %}"
+              class="btn btn-outline-primary ml-2 mb-2"
+              >View Details</a
+            >
+            {% if request.user == course.user %}
+            <a
+              href="{% url 'edit-course' course.id %}"
+              class="btn btn-outline-success ml-2 mb-2"
+              >Edit</a
+            >
+            <a
+              href="{% url 'delete-course' course.id %}"
+              class="btn btn-outline-danger ml-2 mb-2"
+              >Delete</a
+            >
+            {% else %}{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+      <!--For Category -->
+      <!--prettier-ignore-->
+      {% if filter_selected == "All" and categories or filter_selected == "Categories" %}
+      <h1 class="mt-4">Categories</h1>
+      <!--prettier-ignore-->
+      {% for category in categories %}
+
+      <div class="card mb-2 mt-2">
+        <div class="card-body">
+          <span>
+            <h5 class="card-title mt-2">
+              <a href="#">{{category.title}}</a>
+            </h5>
+            <!--prettier-ignore-->
+          </span>
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

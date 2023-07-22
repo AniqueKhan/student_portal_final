@@ -1,0 +1,149 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %}
+<!--prettier-ignore -->
+{% block content %}
+<div class="container mt-2">
+  <h1>{{course.title}}</h1>
+  <div class="row">
+    <div class="col-3">{% include 'side_panel.html' %}</div>
+    <div class="col-9">
+      <div>
+        {% if request.user != course.user %}
+        <a
+          href="{% url 'new-course-question' course.id %}"
+          class="btn btn-outline-primary float-end"
+          >Ask New Question</a
+        >
+        {% endif %}
+
+        <h1>{{question.title}}</h1>
+
+        <div class="card mb-2 border-0">
+          <div>
+            {% if question.user.profile.picture %}
+            <img
+              class="card-img-right rounded-circle img-fluid p-lg-1 mt-2"
+              style="height: 1%; width: 7%"
+              src="{{question.user.profile.picture.url}}"
+              alt="Card image cap"
+            />
+            {% else %}
+
+            <img
+              class="card-img-right rounded-circle img-fluid p-lg-1 mt-2"
+              style="height: 1%; width: 7%"
+              src="{% static 'img/default_pfp.png' %}"
+              alt="Card image cap"
+            />
+            {% endif %}
+            <strong>@{{question.user.username}}</strong>
+
+            {% if question.get_answer_count == 1 %}
+            <span class="badge badge-primary float-end mt-2 mr-2"
+              >{{question.get_answer_count}} Answer</span
+            >
+            {% elif question.get_answer_count >= 1 %}
+            <span class="badge badge-primary float-end mt-2 mr-2"
+              >{{question.get_answer_count}} Answers</span
+            >{% else %}
+            <span class="badge badge-danger float-end mt-2 mr-2"
+              >Unanswered</span
+            >
+            {% endif %}
+
+            <div class="card-body">
+              <h5>{{question.title}}</h5>
+              <p><small>{{question.created_at|naturaltime}}</small></p>
+              <p>{{question.body|safe}}</p>
+            </div>
+
+            <!--Answers -->
+            <h1>Answers : {{answers.count}}</h1>
+
+            {% for answer in answers %} {% if answer.user.profile.picture %}
+            <img
+              class="card-img-right rounded-circle img-fluid p-lg-1 mt-2"
+              style="height: 1%; width: 7%"
+              src="{{answer.user.profile.picture.url}}"
+              alt="Card image cap"
+            />
+            {% else %}
+
+            <img
+              class="card-img-right rounded-circle img-fluid p-lg-1 mt-2"
+              style="height: 1%; width: 7%"
+              src="{% static 'img/default_pfp.png' %}"
+              alt="Card image cap"
+            />
+            {% endif %}
+            <strong>@{{answer.user.username}}</strong>
+
+            <div class="card-body">
+              {% if answer.is_accepted_answer %}
+              <h1>
+                <span class="badge badge-success float-end"
+                  >Marked Correct</span
+                >
+              </h1>
+              {% endif %}
+
+              <h5>{{answer.body|safe}}</h5>
+              <p><small>{{answer.created_at|naturaltime}}</small></p>
+              <h5>Positive Votes: {{answer.up_votes}}</h5>
+              <h5>Negative Votes: {{answer.down_votes}}</h5>
+            </div>
+            <div class="text-center">
+              <a
+                href="{% url 'up-vote' course.id question.id answer.id %}"
+                class="btn btn-outline-success btn-sm mb-2"
+                ><i class="fa fa-level-up pr-2"></i>Up Vote</a
+              >
+
+              <a
+                href="{% url 'down-vote' course.id question.id answer.id %}"
+                class="btn btn-outline-danger btn-sm mb-2"
+                ><i class="fa fa-level-down pr-2"></i>Down Vote</a
+              >
+
+              {% if moderator and not answer.is_accepted_answer %}
+
+              <a
+                href="{% url 'mark-answer' course.id question.id answer.id %}"
+                class="btn btn-outline-primary btn-sm mb-2"
+                ><i class="fa fa-check pr-2"></i>Mark As Correct</a
+              >
+              {% endif %}
+            </div>
+            {% endfor %}
+
+            <form method="post" action="" role="form">
+              {% csrf_token %}
+
+              <div class="form-outline mb-4">
+                <h6 class="form-label pl-2" for="form2Example11">
+                  Your Answer
+                </h6>
+                {{ form.body }}
+              </div>
+
+              {% if form.errors %}
+              <div class="row">
+                <div class="col s12">
+                  <span style="color: red; font-weight: bold"
+                    >{{ form.errors }}</span
+                  >
+                </div>
+              </div>
+              {% endif %}
+              <div class="text-center">
+                <button type="submit" class="btn btn-outline-success mb-2">
+                  Submit Answer
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+</div>

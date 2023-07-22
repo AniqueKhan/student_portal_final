@@ -1,0 +1,121 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %}
+<!--prettier-ignore -->
+{% block content %}
+<div class="container mt-2">
+  <h1>{{course.title}}</h1>
+  <div class="row">
+    <div class="col-3">{% include 'side_panel.html' %}</div>
+    <div class="col-9">
+      <div>
+        <h1>Questions</h1>
+        {% if request.user != course.user %}
+        <a
+          href="{% url 'new-course-question' course.id %}"
+          class="btn btn-outline-primary mb-2"
+          >Ask New Question</a
+        >
+        {% endif %} {% if questions_page.object_list.count == 0 %}
+
+        <div class="alert alert-primary" role="alert">No questions</div>
+        {% else %} {% for question in questions_page %}
+
+        <div class="card mb-2">
+          <div>
+            {% if question.user.profile.picture %}
+            <img
+              class="card-img-right rounded-circle img-fluid p-lg-1 mt-2"
+              style="height: 1%; width: 7%"
+              src="{{question.user.profile.picture.url}}"
+              alt="Card image cap"
+            />
+            {% else %}
+
+            <img
+              class="card-img-right rounded-circle img-fluid p-lg-1 mt-2"
+              style="height: 1%; width: 7%"
+              src="{% static 'img/default_pfp.png' %}"
+              alt="Card image cap"
+            />
+            {% endif %}
+            <strong>@{{question.user.username}}</strong>
+
+            {% if question.get_answer_count == 1 %}
+            <span class="badge badge-primary float-end mt-2 mr-2"
+              >{{question.get_answer_count}} Answer</span
+            >
+            {% elif question.get_answer_count >= 1 %}
+            <span class="badge badge-primary float-end mt-2 mr-2"
+              >{{question.get_answer_count}} Answers</span
+            >{% else %}
+            <span class="badge badge-danger float-end mt-2 mr-2"
+              >Unanswered</span
+            >
+            {% endif %} {% if question.has_accepted_answer %}
+
+            <span class="badge badge-success float-end mt-2 mr-2"
+              >Marked as answered by the moderator</span
+            >{% endif %}
+
+            <div class="card-body">
+              <h5>
+                <a
+                  href="{% url 'course-question-detail' course.id question.id %}"
+                  >{{question.title}}</a
+                >
+              </h5>
+              <p><small>{{question.created_at|naturaltime}}</small></p>
+            </div>
+
+            <div class="text-center">
+              <a
+                href="{% url 'course-question-detail' course.id question.id %}"
+                class="btn btn-outline-primary mb-2"
+                ><i class="fa-solid fa-message pr-2"></i>View Detail Question</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %} {% endif %}
+      </div>
+    </div>
+    {% block pagination %} {% if questions_page.has_other_pages %}
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        {% if questions_page.has_previous %}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="?page={{ questions_page.previous_page_number }}"
+            tabindex="-1"
+            >Previous</a
+          >
+        </li>
+        {% endif %} {% for page_number in questions_page.paginator.page_range %}
+        {% if questions_page.number == page_number %}
+        <li class="page-item active">
+          <a class="page-link" href="?page={{ page_number }}">
+            {{page_number}}
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_number }}"
+            >{{page_number}}</a
+          >
+        </li>
+        {% endif %} {% endfor %} {% if questions_page.has_next %}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="?page={{ questions_page.next_page_number }}"
+            tabindex="-1"
+            >Next</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %} {% endblock pagination %} {% endblock content %}
+  </div>
+</div>

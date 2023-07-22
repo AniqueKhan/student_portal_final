@@ -1,0 +1,37 @@
+{% extends 'base.html' %}{% load static %} {% block content %}
+<div class="container mt-2">
+  <h1>{{course.title}}</h1>
+  <div class="row">
+    <div class="col-3">{% include 'side_panel.html' %}</div>
+    <div class="col-9">
+      <div class="card" style="width: 52em">
+        <div class="card-body">
+          <h5>Title:</h5>
+          <a href="{% url 'course-detail' course.id %}"
+            ><h5 class="card-title">{{course.title}}</h5></a
+          >
+          <h5>Description:</h5>
+          <p class="card-text">{{course.description}}</p>
+          <h5>Syllabus:</h5>
+          <p class="card-text">{{course.syllabus|safe}}</p>
+        </div>
+        <img src="{{course.picture.url}}" class="card-img-top" alt="..." />
+
+        <div class="card-body">
+          <a
+            href="{% url 'course-detail' course.id %}"
+            class="btn btn-outline-success"
+            >Resume</a
+          >
+          <a
+            href="{% url 'unenroll' course.id %}"
+            class="btn btn-outline-danger ml-3"
+            >Unenroll</a
+          >
+        </div>
+      </div>
+      <br />
+    </div>
+  </div>
+</div>
+{% endblock content %}

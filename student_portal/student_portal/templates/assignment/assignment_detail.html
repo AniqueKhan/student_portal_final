@@ -1,0 +1,135 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-2">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <h1>{{assignment.title}}</h1>
+      <div class="bg-light rounded-3">
+        <div class="container-fluid">
+          <p class="fs-4">{{assignment.content|safe}}</p>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            <div class="alert alert-primary" role="alert">
+              <h6>Due Date</h6>
+              <strong> {{assignment.due}}</strong>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="alert alert-primary" role="alert">
+              <h6>Points</h6>
+              <strong> {{assignment.points}}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button
+                class="btn btn-link"
+                data-toggle="collapse"
+                data-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+                style="text-decoration: none"
+              >
+                <i class="fa fa-chevron-down pr-2"></i>
+
+                Assignment Files
+              </button>
+            </h5>
+          </div>
+
+          <div
+            id="collapseOne"
+            class="accordian-body collapse"
+            aria-labelledby="headingOne"
+            data-parent="#accordion"
+          >
+            <div class="card-body">
+              <ul class="list-group mt-2">
+                {% for file in assignment.files.all %}
+                <li class="list-group-item">
+                  <a href="{{file.file.url}}" download
+                    ><i class="fa fa-download"></i>
+
+                    {{file.get_file_name}}</a
+                  >
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />{% if request.user != course.user %}
+      <!--prettier-ignore -->
+      {% if my_submissions.count != 0 %}
+      <div id="accordion2">
+        <div class="card">
+          <div class="card-header" id="headingOne2">
+            <h5 class="mb-0">
+              <button
+                class="btn btn-link"
+                data-toggle="collapse"
+                data-target="#collapseOne2"
+                aria-expanded="true"
+                aria-controls="collapseOne2"
+                style="text-decoration: none"
+              >
+                <i class="fa fa-chevron-down pr-2"></i>
+
+                My Submissions
+              </button>
+            </h5>
+          </div>
+
+          <div
+            id="collapseOne2"
+            class="accordian-body collapse"
+            aria-labelledby="headingOne2"
+            data-parent="#accordion"
+          >
+            <div class="card-body">
+              <ul class="list-group mt-2">
+                <!-- prettier-ignore -->
+                {% for submission in my_submissions %}
+                <li class="list-group-item">
+                  <strong>Submitted on :</strong>
+                  {{submission.date.date}}<br />
+                  <strong>Submission comment :</strong>
+                  {{submission.comment}}<br />
+
+                  <a href="{{submission.file.url}}" download
+                    ><i class="fa fa-download"></i>
+
+                    {{submission.get_file_name}}</a
+                  >
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="text-center">
+        <a
+          href="{% url 'submit-assignment' course.id module_id assignment.id %}"
+          class="btn btn-outline-success mt-2"
+          ><i class="fa fa-check-circle"></i>
+
+          Take Assignment</a
+        >
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

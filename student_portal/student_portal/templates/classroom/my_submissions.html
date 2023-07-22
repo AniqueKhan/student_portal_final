@@ -1,0 +1,44 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-2">
+  <h1>{{course.title}}</h1>
+  <div class="row">
+    <div class="col-3">{% include 'side_panel.html' %}</div>
+    <div class="col-9">
+      <div>
+        <h1>My Submissions</h1>
+        {% if grades.count == 0 %}
+        <div class="container mt-2 mb-2">
+          <div class="alert alert-primary" role="alert">No submissions yet</div>
+        </div>
+        {% else %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Assignment</th>
+              <th scope="col">Due</th>
+              <th scope="col">Submitted On</th>
+              <th scope="col">Status</th>
+              <th scope="col">Score</th>
+              <th scope="col">Out Of</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for grade in grades %}
+            <tr>
+              <td><small>{{grade.submission.assignment.title}}</small></td>
+              <td><small>{{grade.submission.assignment.due}}</small></td>
+              <td><small>{{grade.submission.date}}</small></td>
+              <td><small>{{grade.status}}</small></td>
+              <td><small>{{grade.points}}</small></td>
+              <td><small>{{grade.submission.assignment.points}}</small></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

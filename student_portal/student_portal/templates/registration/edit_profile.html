@@ -1,0 +1,60 @@
+{% extends 'base.html' %}{% block content %}
+<div class="container mt-2">
+  <div class="row">
+    <div class="card w-100">
+      <div class="card-body">
+        <div class="text-center">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+            style="width: 185px"
+            alt="logo"
+          />
+          <h4 class="mt-1 mb-2 pb-1">Student Portal - Anique Khan</h4>
+          <h4 class="pb-1">Edit Your Profile</h4>
+        </div>
+        <form method="post" action="" role="form" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="form-outline mb-4">
+            <h6 class="form-label" for="form2Example11">Full Name</h6>
+            {{ form.full_name }}
+          </div>
+          <div class="form-outline mb-4">
+            <h6 class="form-label" for="form2Example11">Location</h6>
+            {{ form.location }}
+          </div>
+          <div class="form-outline mb-4">
+            <h6 class="form-label" for="form2Example11">URL</h6>
+            {{ form.url }}
+          </div>
+          <div class="form-outline mb-4">
+            <h6 class="form-label" for="form2Example11">Profile Info</h6>
+            {{ form.profile_info }}
+          </div>
+          <div class="form-outline mb-4">
+            <h6 class="form-label" for="form2Example11">Profile Picture</h6>
+            {{ form.picture }}
+          </div>
+          <div class="form-outline mb-4">
+            <h6 class="form-label" for="form2Example11">Banner</h6>
+            {{ form.banner }}
+          </div>
+
+          {% if form.errors %}
+          <div class="row">
+            <div class="col s12">
+              <span style="color: red; font-weight: bold"
+                >{{ form.errors }}</span
+              >
+            </div>
+          </div>
+          {% endif %}
+          <div class="text-center">
+            <button type="submit" class="btn btn-outline-success">Done</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

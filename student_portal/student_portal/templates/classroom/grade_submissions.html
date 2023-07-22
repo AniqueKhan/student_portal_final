@@ -1,0 +1,68 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-2">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <h1 class="text-center">{{grade.course.title}}</h1>
+      <div class="bg-light rounded-3">
+        <div class="card-body">
+          <ul class="list-group mt-2">
+            <!-- prettier-ignore -->
+            <li class="list-group-item">
+                <strong>Submitted by :</strong>
+                {{grade.submission.user.username}}<br />
+                <strong>Submitted on :</strong>
+                {{grade.submission.date.date}}<br />
+                <strong>Submission comment :</strong>
+                {{grade.submission.comment}}<br />
+
+                <a href="{{grade.submission.file.url}}" download
+                  ><i class="fa fa-download"></i>
+
+                  <strong>Submission file :</strong> {{grade.submission.get_file_name}}</a
+                >
+              </li>
+          </ul>
+        </div>
+      </div>
+
+      <form
+        method="post"
+        action="{% url 'grade-submission' course.id grade.id %}"
+        role="form"
+        class="mt-2"
+      >
+        {% csrf_token %}
+
+        <div class="form-outline mb-4">
+          <h6 class="form-label" for="form2Example11">
+            Points (Out Of {{grade.submission.assignment.points}})
+          </h6>
+          <input
+            type="number"
+            name="points"
+            class="form-control form-control-sm"
+            aria-label="Sizing example input"
+            max="{{grade.submission.assignment.points}}"
+          />
+        </div>
+
+        {% if form.errors %}
+        <div class="row">
+          <div class="col s12">
+            <span style="color: red; font-weight: bold">{{ form.errors }}</span>
+          </div>
+        </div>
+        {% endif %}
+        <div class="text-center">
+          <button type="submit" class="btn btn-outline-success">
+            <i class="fa fa-check-circle"></i>
+            Grade Submission
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
