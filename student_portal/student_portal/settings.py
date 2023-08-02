@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-v80vtzjs7nbccjyrwrd+w3@(9$_cjvh*1b$i1&17d0@dd=wnap
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["aniquestudentportal.pythonanywhere.com"]
+ALLOWED_HOSTS = ["aniquestudentportal.pythonanywhere.com",'localhost']
 
 
 # Application definition

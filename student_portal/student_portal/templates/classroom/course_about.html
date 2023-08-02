@@ -17,18 +17,6 @@
         </div>
         <img src="{{course.picture.url}}" class="card-img-top" alt="..." />
 
-        <div class="card-body">
-          <a
-            href="{% url 'course-detail' course.id %}"
-            class="btn btn-outline-success"
-            >Resume</a
-          >
-          <a
-            href="{% url 'unenroll' course.id %}"
-            class="btn btn-outline-danger ml-3"
-            >Unenroll</a
-          >
-        </div>
       </div>
       <br />
     </div>
