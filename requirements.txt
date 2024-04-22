@@ -1,4 +1,5 @@
 asgiref==3.8.1
+coverage==7.4.4
 Django==3.2.18
 django-ckeditor==6.3.2
 django-js-asset==2.2.0
