@@ -10,6 +10,8 @@ ON_VPS=env("ON_VPS")=="true"
 
 SECRET_KEY = env("SECRET_KEY")
 
+DEBUG = not ON_VPS
+
 if ON_VPS:
     ALLOWED_HOSTS = ['184.94.215.214',"studentportal.pynabte.com",'www.studentportal.pynabte.com']
 else:
