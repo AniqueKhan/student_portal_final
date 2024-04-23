@@ -13,7 +13,7 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = not ON_VPS
 
 if ON_VPS:
-    ALLOWED_HOSTS = ['184.94.215.214',"studentportal.pynabte.com",'www.studentportal.pynabte.com']
+    ALLOWED_HOSTS = ['184.94.215.214',"studentportal.pynabyte.com",'www.studentportal.pynabyte.com']
 else:
     ALLOWED_HOSTS = ['localhost']
 
