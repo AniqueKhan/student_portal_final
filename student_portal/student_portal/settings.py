@@ -143,7 +143,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = "/home/pynabyte/static_root_directory/static_root_student_portal" if ON_VPS else ''
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/home/pynabyte/media_directory/media_directory_student_portal' if ON_VPS else os.path.join(BASE_DIR, 'media')
 
 # Login
 LOGIN_REDIRECT_URL = 'index'
