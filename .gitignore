@@ -4,3 +4,4 @@ venv
 media
 uploads
 *.coverage
+__pycache__
