@@ -11,6 +11,7 @@ ON_VPS=env("ON_VPS")=="true"
 SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = not ON_VPS
+USE_SQL_ON_LOCAL=env("USE_SQL_ON_LOCAL")=="true"
 
 if ON_VPS:
     ALLOWED_HOSTS = ['184.94.215.214',"studentportal.pynabyte.com",'www.studentportal.pynabyte.com']
@@ -98,6 +99,11 @@ else:
             'HOST': env("LOCAL_DB_HOST"),
             'PORT': '5432',
         }
+    } if not USE_SQL_ON_LOCAL else {"default":{
+
+        "ENGINE": "django.db.backends.sqlite3",
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
     }
 
 
