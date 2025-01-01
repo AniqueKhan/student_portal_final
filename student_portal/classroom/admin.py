@@ -9,10 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user')
-
-    list_editable = ['user']
-
+    list_display = ('title', 'user','category')
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Course, CourseAdmin)
