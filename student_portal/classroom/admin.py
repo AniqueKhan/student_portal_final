@@ -10,7 +10,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('title', 'user','category')
-    filter_horizontal = ('announcements')
+    filter_horizontal = ('announcements',)
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Course, CourseAdmin)
