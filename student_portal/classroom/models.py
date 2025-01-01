@@ -45,7 +45,7 @@ class Announcement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
-        return self.body
+        return self.body[:10] if len(self.body) > 10 else self.body
 
 
 class Course(models.Model):
