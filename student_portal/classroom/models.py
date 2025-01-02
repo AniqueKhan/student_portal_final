@@ -58,8 +58,8 @@ class Course(models.Model):
     syllabus = RichTextField()
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='course_owner')
-    enrolled = models.ManyToManyField(User)
-    modules = models.ManyToManyField(Module)
+    enrolled = models.ManyToManyField(User,blank=True)
+    modules = models.ManyToManyField(Module,blank=True)
     questions = models.ManyToManyField(CourseQuestion)
     created_at = models.DateTimeField(auto_now_add=True)
 
