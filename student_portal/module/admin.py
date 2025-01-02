@@ -4,6 +4,7 @@ from .models import Module
 
 class ModuleAdmin(admin.ModelAdmin):
     list_display = ['title','user']
+    filter_horizontal = ("pages",'quizzes','assignment')
 
 
 admin.site.register(Module,ModuleAdmin)
