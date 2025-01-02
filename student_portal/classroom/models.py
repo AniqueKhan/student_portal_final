@@ -66,6 +66,8 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
+    def get_short_description(self):
+        return self.description[:100] if len(self.description) > 100 else self.description
 
 class Grade(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
